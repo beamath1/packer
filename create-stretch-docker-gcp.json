@@ -1,0 +1,38 @@
+{
+  "variables": {
+    "google_project": "devchaos-184619"
+  },
+  "builders": [{
+    "type": "googlecompute",
+    "account_file": "./serviceaccount/google-account.json",
+    "project_id": "{{user `google_project` }}",
+    "source_image": "debian-9-stretch-v20180510",
+    "disk_size": "15",
+    "machine_type": "n1-standard-1",
+    "communicator": "ssh",
+    "ssh_username": "test",
+    "ssh_password": "test",
+    "zone": "us-east1-c",
+    "preemptible": "true",
+    "subnetwork": "projects/arctic-conduit-180419/regions/us-east1/subnetworks/net-10-200-12-0--24",
+    "use_internal_ip": true,
+    "omit_external_ip": false,
+    "tags": [
+      "packer",
+      "automation",
+      "tests"
+    ],
+    "metadata": {
+
+    }
+  }],
+  "provisioners": [{
+    "type": "file",
+    "source": "./scripts/dns.conf",
+    "destination": "/tmp/dhclient.conf"
+  },
+  {
+    "type": "shell",
+    "script": "./scripts/provision.sh"
+  }]
+}
